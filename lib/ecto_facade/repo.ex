@@ -113,6 +113,22 @@ defmodule EctoFacade.Repo do
           end
         end
 
+        def reload(queryable, opts \\ []) do
+          try do
+            get_read_repo().reload(queryable, opts)
+          catch
+            _ -> @master_repo.reload(queryable, opts)
+          end
+        end
+
+        def reload!(queryable, opts \\ []) do
+          try do
+            get_read_repo().reload!(queryable, opts)
+          catch
+            _ -> @master_repo.reload!(queryable, opts)
+          end
+        end
+
         def one(queryable, opts \\ []) do
           try do
             get_read_repo().one(queryable, opts)
@@ -135,6 +151,14 @@ defmodule EctoFacade.Repo do
             get_read_repo().aggregate(queryable, aggregate, field, opts)
           catch
             _ -> @master_repo.aggregate(queryable, aggregate, field, opts)
+          end
+        end
+
+        def exists?(queryable, opts \\ []) do
+          try do
+            get_read_repo().exists?(queryable, opts)
+          catch
+            _ -> @master_repo.exists?(queryable, opts)
           end
         end
 
@@ -170,6 +194,10 @@ defmodule EctoFacade.Repo do
         def get_by!(queryable, clauses, opts \\ []),
           do: get_read_repo().get_by!(queryable, clauses, opts)
 
+        def reload(queryable, opts \\ []), do: get_read_repo().reload(queryable, opts)
+
+        def reload!(queryable, opts \\ []), do: get_read_repo().reload!(queryable, opts)
+
         def one(queryable, opts \\ []), do: get_read_repo().one(queryable, opts)
 
         def one!(queryable, opts \\ []), do: get_read_repo().one!(queryable, opts)
@@ -177,6 +205,10 @@ defmodule EctoFacade.Repo do
         def aggregate(queryable, aggregate, field, opts \\ [])
             when aggregate in [:count, :avg, :max, :min, :sum] and is_atom(field) do
           get_read_repo().aggregate(queryable, aggregate, field, opts)
+        end
+
+        def exists?(queryable, opts \\ []) do
+          get_read_repo().exists?(queryable, opts)
         end
 
         def preload(struct_or_structs_or_nil, preloads, opts \\ []) do
