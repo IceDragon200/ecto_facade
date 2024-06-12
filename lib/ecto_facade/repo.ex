@@ -56,7 +56,7 @@ defmodule EctoFacade.Repo do
       defdelegate insert_or_update!(changeset, opts \\ []), to: @master_repo
       defdelegate delete!(struct, opts \\ []), to: @master_repo
 
-      if function_exported?(@master_repo.__adapter__, :transaction, 3) do
+      if function_exported?(@master_repo.__adapter__(), :transaction, 3) do
         defdelegate transaction(fun_or_multi, opts \\ []), to: @master_repo
         defdelegate in_transaction?(), to: @master_repo
         defdelegate rollback(value), to: @master_repo
