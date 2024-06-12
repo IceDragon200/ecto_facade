@@ -19,6 +19,12 @@ defmodule EctoFacade.TestAdapter do
     Supervisor.Spec.worker(Task, [fn -> :timer.sleep(:infinity) end])
   end
 
+  @impl true
+  def init(config) do
+    meta = %{stacktrace: nil}
+    {:ok, child_spec(config[:repo], config), meta}
+  end
+
   ## Types
 
   def loaders(:binary_id, type), do: [Ecto.UUID, type]
